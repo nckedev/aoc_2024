@@ -1,12 +1,17 @@
+use day2::Day2;
+use day3::Day3;
+
 use crate::day1::Day1;
 use std::{fmt::Display, fs};
 
 mod day1;
+mod day2;
+mod day3;
 mod grid;
 fn main() {
     // let data = ProblemData::from_string("1 2 3 4 5".to_string());
-    let data = ProblemData::from_file(1, Case::Real);
-    let mut d = Day1::new(data);
+    let data = ProblemData::from_file(3, Case::Real);
+    let mut d = Day3::new(data);
 
     {
         let res1 = d.solve1();
@@ -87,6 +92,7 @@ impl ProblemData {
     }
 }
 
+#[derive(PartialEq, Eq, Debug)]
 struct Answer {
     value: String,
 }
@@ -109,5 +115,33 @@ impl From<u32> for Answer {
         Self {
             value: value.to_string(),
         }
+    }
+}
+
+impl From<usize> for Answer {
+    fn from(value: usize) -> Self {
+        Self {
+            value: value.to_string(),
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn day2_part1() {
+        let mut d2 = Day2::new(ProblemData::from_file(2, Case::Real));
+        assert_eq!(d2.solve1().into(), 269.into())
+    }
+    #[test]
+    fn day2_part2() {
+        let mut d2 = Day2::new(ProblemData::from_file(2, Case::Real));
+        assert_eq!(d2.solve2().into(), 0.into())
+    }
+    #[test]
+    fn day3_part1_test() {
+        let mut d3 = Day3::new(ProblemData::from_file(3, Case::Test));
+        assert_eq!(d3.solve1().into(), 0.into())
     }
 }
