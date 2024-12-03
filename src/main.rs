@@ -128,20 +128,67 @@ impl From<usize> for Answer {
 
 #[cfg(test)]
 mod tests {
+    use rstest::rstest;
+
     use super::*;
-    #[test]
-    fn day2_part1() {
-        let mut d2 = Day2::new(ProblemData::from_file(2, Case::Real));
-        assert_eq!(d2.solve1().into(), 269.into())
+
+    macro_rules! day {
+        ($Foo : ident, $Nr: expr) => {
+            &mut $Foo::new(ProblemData::from_file($Nr, Case::Real))
+        };
     }
-    #[test]
-    fn day2_part2() {
-        let mut d2 = Day2::new(ProblemData::from_file(2, Case::Real));
-        assert_eq!(d2.solve2().into(), 0.into())
+    macro_rules! day_test {
+        ($Foo : ident, $Nr: expr) => {
+            &mut $Foo::new(ProblemData::from_file($Nr, Case::Test))
+        };
     }
-    #[test]
-    fn day3_part1_test() {
-        let mut d3 = Day3::new(ProblemData::from_file(3, Case::Test));
-        assert_eq!(d3.solve1().into(), 0.into())
+
+    #[rstest]
+    #[case(day!(Day1, 1), 3574690)]
+    #[case(day!(Day2, 2), 269)]
+    #[case(day!(Day3, 3), 187825547)]
+    // #[case(day!(Day4, 4), 0)]
+    // #[case(day!(Day5, 5), 0)]
+    // #[case(day!(Day6, 6), 0)]
+    // #[case(day!(Day7, 7), 0)]
+    // #[case(day!(Day8, 8), 0)]
+    fn solve_part1(#[case] d: &mut impl Solver, #[case] expected: u32) {
+        if expected > 0 {
+            let p1 = d.solve1();
+            assert_eq!(p1.into(), expected.into());
+        }
+    }
+
+    #[rstest]
+    #[case(day!(Day1, 1), 22565391)]
+    #[case(day!(Day2, 2), 0)]
+    #[case(day!(Day3, 3), 85508223)]
+    // #[case(day!(Day4, 4), 0)]
+    // #[case(day!(Day5, 5), 0)]
+    // #[case(day!(Day6, 6), 0)]
+    // #[case(day!(Day7, 7), 0)]
+    // #[case(day!(Day8, 8), 0)]
+    fn solve_part2(#[case] d: &mut impl Solver, #[case] expected: u32) {
+        if expected > 0 {
+            let p1 = d.solve2();
+            assert_eq!(p1.into(), expected.into());
+        }
+    }
+
+    #[rstest]
+    #[case(day_test!(Day3, 3), 161)]
+    fn solve_part1_test_case(#[case] d: &mut impl Solver, #[case] expected: u32) {
+        if expected > 0 {
+            let p1 = d.solve1();
+            assert_eq!(p1.into(), expected.into());
+        }
+    }
+    #[rstest]
+    #[case(day_test!(Day2, 2), 0)]
+    fn solve_part2_test_case(#[case] d: &mut impl Solver, #[case] expected: u32) {
+        if expected > 0 {
+            let p1 = d.solve2();
+            assert_eq!(p1.into(), expected.into());
+        }
     }
 }
