@@ -45,6 +45,7 @@ impl Solver for Day5 {
         self.updates
             .iter()
             .filter(|x| x.is_updated)
+            // .inspect(|x| println!("inspect: {}", x.get_center()))
             .fold(0, |acc, x| acc + x.get_center())
     }
 }
@@ -110,6 +111,8 @@ impl Update {
             if let (Some(u1), Some(u2)) = (u1, u2) {
                 //the index u1 is greater than u2 so it has to be in the wrong spot
                 if u1 >= u2 {
+                    // TODO: Move x.first to the index of x.second and update alla indexes between
+                    // u1 and u2, and try again
                     // u1 == index of the first key in the rule
 
                     //alla indexes som är större eller lika med x.second (u2) ska flyttas +1
@@ -126,6 +129,7 @@ impl Update {
                     }
 
                     self.indexed.entry(x.first).and_modify(|v| *v = u2);
+                    self.check_and_fix_order(rules);
                     self.is_updated = true;
                 }
 
