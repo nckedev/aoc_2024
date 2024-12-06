@@ -1,5 +1,6 @@
 use day2::Day2;
 use day3::Day3;
+use day5::Day5;
 
 use crate::day1::Day1;
 use std::{fmt::Display, fs};
@@ -7,11 +8,13 @@ use std::{fmt::Display, fs};
 mod day1;
 mod day2;
 mod day3;
+mod day4;
+mod day5;
 mod grid;
 fn main() {
     // let data = ProblemData::from_string("1 2 3 4 5".to_string());
-    let data = ProblemData::from_file(3, Case::Real);
-    let mut d = Day3::new(data);
+    let data = ProblemData::from_file(5, Case::Real);
+    let mut d = Day5::new(data);
 
     {
         let res1 = d.solve1();
@@ -128,6 +131,7 @@ impl From<usize> for Answer {
 
 #[cfg(test)]
 mod tests {
+    use day4::Day4;
     use rstest::rstest;
 
     use super::*;
@@ -147,15 +151,17 @@ mod tests {
     #[case(day!(Day1, 1), 3574690)]
     #[case(day!(Day2, 2), 269)]
     #[case(day!(Day3, 3), 187825547)]
-    // #[case(day!(Day4, 4), 0)]
-    // #[case(day!(Day5, 5), 0)]
+    #[case(day!(Day4, 4), -1)]
+    #[case(day!(Day5, 5), 4872)]
     // #[case(day!(Day6, 6), 0)]
     // #[case(day!(Day7, 7), 0)]
     // #[case(day!(Day8, 8), 0)]
-    fn solve_part1(#[case] d: &mut impl Solver, #[case] expected: u32) {
+    fn solve_part1(#[case] d: &mut impl Solver, #[case] expected: i32) {
         if expected > 0 {
             let p1 = d.solve1();
             assert_eq!(p1.into(), expected.into());
+        } else {
+            assert!(true);
         }
     }
 
@@ -163,7 +169,7 @@ mod tests {
     #[case(day!(Day1, 1), 22565391)]
     #[case(day!(Day2, 2), 0)]
     #[case(day!(Day3, 3), 85508223)]
-    // #[case(day!(Day4, 4), 0)]
+    #[case(day!(Day4, 4), 0)]
     // #[case(day!(Day5, 5), 0)]
     // #[case(day!(Day6, 6), 0)]
     // #[case(day!(Day7, 7), 0)]
@@ -177,6 +183,8 @@ mod tests {
 
     #[rstest]
     #[case(day_test!(Day3, 3), 161)]
+    #[case(day_test!(Day4, 4), 18)]
+    #[case(day_test!(Day5, 5), 143)]
     fn solve_part1_test_case(#[case] d: &mut impl Solver, #[case] expected: u32) {
         if expected > 0 {
             let p1 = d.solve1();
