@@ -4,7 +4,9 @@ where
 {
     data: Vec<Vec<T>>,
 }
-
+/**
+     1 2 3 4 5 6 7 8 9
+*/
 impl<T> Grid<T>
 where
     T: Clone + std::fmt::Debug,
@@ -15,6 +17,7 @@ where
     pub fn iter_rows(&self) -> impl Iterator<Item = Vec<&T>> {
         self.data.iter().map(|r| r.iter().collect())
     }
+
     pub fn iter_cols(&self) -> impl Iterator<Item = Vec<&T>> {
         (0..self.data[0].len())
             .map(move |col| self.data.iter().filter_map(|row| row.get(col)).collect())

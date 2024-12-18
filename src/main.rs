@@ -1,20 +1,25 @@
+use day17::Day17;
 use day2::Day2;
 use day3::Day3;
 use day5::Day5;
+use day6::Day6;
 
 use crate::day1::Day1;
 use std::{fmt::Display, fs};
 
 mod day1;
+mod day17;
 mod day2;
 mod day3;
 mod day4;
 mod day5;
+mod day6;
+mod graph;
 mod grid;
 fn main() {
     // let data = ProblemData::from_string("1 2 3 4 5".to_string());
-    let data = ProblemData::from_file(5, Case::Real);
-    let mut d = Day5::new(data);
+    let data = ProblemData::from_file(17, Case::Real);
+    let mut d = Day17::new(data);
 
     {
         let res1 = d.solve1();
@@ -129,6 +134,19 @@ impl From<usize> for Answer {
     }
 }
 
+impl From<&str> for Answer {
+    fn from(value: &str) -> Self {
+        Self {
+            value: value.to_string(),
+        }
+    }
+}
+impl From<String> for Answer {
+    fn from(value: String) -> Self {
+        Self { value }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use day4::Day4;
@@ -156,6 +174,7 @@ mod tests {
     // #[case(day!(Day6, 6), 0)]
     // #[case(day!(Day7, 7), 0)]
     // #[case(day!(Day8, 8), 0)]
+    #[case(day!(Day17, 17), "2,3,4,7,5,7,3,0,7")]
     fn solve_part1(#[case] d: &mut impl Solver, #[case] expected: i32) {
         if expected > 0 {
             let p1 = d.solve1();
