@@ -1,11 +1,14 @@
+#![allow(unused_imports)]
 use day11::Day11;
 use day17::Day17;
 use day2::Day2;
 use day3::Day3;
 use day5::Day5;
 use day6::Day6;
+use day7::Day7;
+use day8::Day8;
 
-use crate::day1::Day1;
+use day1::Day1;
 use std::{fmt::Display, fs};
 
 mod day1;
@@ -16,12 +19,14 @@ mod day3;
 mod day4;
 mod day5;
 mod day6;
+mod day7;
+mod day8;
 mod graph;
 mod grid;
 fn main() {
     // let data = ProblemData::from_string("1 2 3 4 5".to_string());
-    let data = ProblemData::from_file(11, Case::Real);
-    let mut d = Day11::new(data);
+    let data = ProblemData::from_file(8, Case::Real);
+    let mut d = Day8::new(data);
 
     {
         let res1 = d.solve1();
@@ -61,6 +66,7 @@ trait Solver {
 //     }
 // }
 
+#[allow(dead_code)]
 enum Case {
     Test,
     Real,
@@ -76,6 +82,7 @@ impl ProblemData {
     }
 }
 
+#[allow(dead_code)]
 impl ProblemData {
     fn from_file(day: u32, case: Case) -> Self {
         let filename = match case {
@@ -127,6 +134,13 @@ impl From<u32> for Answer {
         }
     }
 }
+impl From<u64> for Answer {
+    fn from(value: u64) -> Self {
+        Self {
+            value: value.to_string(),
+        }
+    }
+}
 
 impl From<usize> for Answer {
     fn from(value: usize) -> Self {
@@ -171,7 +185,7 @@ mod tests {
     #[case(day!(Day1, 1), 3574690)]
     #[case(day!(Day2, 2), 269)]
     #[case(day!(Day3, 3), 187825547)]
-    #[case(day!(Day4, 4), -1)]
+    // #[case(day!(Day4, 4), -1)]
     #[case(day!(Day5, 5), 4872)]
     // #[case(day!(Day6, 6), 0)]
     // #[case(day!(Day7, 7), 0)]

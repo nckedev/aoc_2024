@@ -4,7 +4,7 @@ use crate::{
     grid::grid2::{Grid2, Grid2Iterator, GridDirection},
     Solver,
 };
-pub(crate) struct Day6 {
+pub struct Day6 {
     grid: Grid2<Node>,
     map: HashSet<(usize, usize)>,
 }

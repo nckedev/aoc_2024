@@ -151,5 +151,4 @@ enum Operation {
     Mul(i32, i32),
     Do,
     Dont,
-    Invalid,
 }

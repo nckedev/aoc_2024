@@ -15,7 +15,7 @@ impl Solver for Day11 {
     }
 
     fn solve1(&mut self) -> impl Into<crate::Answer> {
-        for i in 0..25 {
+        for _ in 0..25 {
             let x = self
                 .data
                 .iter()

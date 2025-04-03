@@ -5,7 +5,7 @@ use std::{
 
 use crate::Solver;
 
-pub(crate) struct Day5 {
+pub struct Day5 {
     rules: Vec<Rule>,
     updates: Vec<Update>,
 }
