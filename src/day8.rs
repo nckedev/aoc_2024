@@ -187,6 +187,7 @@ impl<const N: usize> Roof<N> {
             }
         }
     }
+
     fn map_weakspots2(&mut self) {
         for (_, v) in &self.map {
             if v.len() > 1 {
@@ -194,8 +195,8 @@ impl<const N: usize> Roof<N> {
                     for second in v {
                         if first != second {
                             let offset = first.offset_to(second);
-                            let mut f = *first;
 
+                            let mut f = *first;
                             while let Some(n) = f.prev_from_offset::<N>(&offset) {
                                 self.weakspots.insert(n);
                                 f = n;

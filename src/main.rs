@@ -213,11 +213,11 @@ mod tests {
     #[case(day!(Day1, 1), 22565391)]
     #[case(day!(Day2, 2), 0)]
     #[case(day!(Day3, 3), 85508223)]
-    // #[case(day!(Day4, 4), 0)]
+    #[case(day!(Day4, 4), 0)]
     #[case(day!(Day5, 5), 5564)]
-    // #[case(day!(Day6, 6), 0)]
+    #[case(day!(Day6, 6), 0)]
     // #[case(day!(Day7, 7), 0)]
-    // #[case(day!(Day8, 8), 0)]
+    #[case(day!(Day8, 8), 1287)]
     fn solve_part2(#[case] d: &mut impl Solver, #[case] expected: u32) {
         if expected > 0 {
             let p1 = d.solve2();
