@@ -103,6 +103,22 @@ impl Idx {
     fn offset_to(&self, other: &Idx) -> IdxOffset {
         IdxOffset(self.x - other.x, self.y - other.y)
     }
+
+    fn next_from_offset<const N: usize>(&self, offset: &IdxOffset) -> Option<Idx> {
+        let n = self + *offset;
+        if n.is_valid::<N>() {
+            return Some(n);
+        }
+        None
+    }
+
+    fn prev_from_offset<const N: usize>(&self, offset: &IdxOffset) -> Option<Idx> {
+        let n = self - *offset;
+        if n.is_valid::<N>() {
+            return Some(n);
+        }
+        None
+    }
 }
 
 #[derive(Eq, PartialEq, Hash, Debug)]
@@ -171,10 +187,34 @@ impl<const N: usize> Roof<N> {
             }
         }
     }
+    fn map_weakspots2(&mut self) {
+        for (_, v) in &self.map {
+            if v.len() > 1 {
+                for first in v.into_iter() {
+                    for second in v {
+                        if first != second {
+                            let offset = first.offset_to(second);
+                            let mut f = *first;
+
+                            while let Some(n) = f.prev_from_offset::<N>(&offset) {
+                                self.weakspots.insert(n);
+                                f = n;
+                            }
+
+                            let mut s = *second;
+                            while let Some(p) = s.next_from_offset::<N>(&offset) {
+                                self.weakspots.insert(p);
+                                s = p;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     fn count_weakspots(&self) -> i32 {
         self.weakspots.len() as i32
-        // self.weakspots.values().sum::<u32>() as i32
     }
 
     #[allow(dead_code)]
@@ -219,12 +259,12 @@ impl Solver for Day8 {
 
     fn solve1(&mut self) -> impl Into<crate::Answer> {
         self.roof.map_weakspots();
-        // self.roof.pretty_print(true);
         self.roof.count_weakspots()
     }
 
     fn solve2(&mut self) -> impl Into<crate::Answer> {
-        0
+        self.roof.map_weakspots2();
+        self.roof.count_weakspots()
     }
 }
 
