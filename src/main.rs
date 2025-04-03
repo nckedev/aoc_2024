@@ -142,6 +142,14 @@ impl From<u64> for Answer {
     }
 }
 
+impl From<i64> for Answer {
+    fn from(value: i64) -> Self {
+        Self {
+            value: value.to_string(),
+        }
+    }
+}
+
 impl From<usize> for Answer {
     fn from(value: usize) -> Self {
         Self {
@@ -187,12 +195,12 @@ mod tests {
     #[case(day!(Day3, 3), 187825547)]
     // #[case(day!(Day4, 4), -1)]
     #[case(day!(Day5, 5), 4872)]
-    // #[case(day!(Day6, 6), 0)]
-    // #[case(day!(Day7, 7), 0)]
-    // #[case(day!(Day8, 8), 0)]
+    #[case(day!(Day6, 6), 5453)]
+    #[case(day!(Day7, 7), 1399219271639)]
+    #[case(day!(Day8, 8), 423)]
     #[case(day!(Day11, 11), 193899)]
     #[case(day!(Day17, 17), "2,3,4,7,5,7,3,0,7")]
-    fn solve_part1(#[case] d: &mut impl Solver, #[case] expected: i32) {
+    fn solve_part1(#[case] d: &mut impl Solver, #[case] expected: i64) {
         if expected > 0 {
             let p1 = d.solve1();
             assert_eq!(p1.into(), expected.into());
@@ -205,7 +213,7 @@ mod tests {
     #[case(day!(Day1, 1), 22565391)]
     #[case(day!(Day2, 2), 0)]
     #[case(day!(Day3, 3), 85508223)]
-    #[case(day!(Day4, 4), 0)]
+    // #[case(day!(Day4, 4), 0)]
     #[case(day!(Day5, 5), 5564)]
     // #[case(day!(Day6, 6), 0)]
     // #[case(day!(Day7, 7), 0)]
