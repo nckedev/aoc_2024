@@ -193,7 +193,7 @@ mod tests {
     #[case(day!(Day1, 1), 3574690)]
     #[case(day!(Day2, 2), 269)]
     #[case(day!(Day3, 3), 187825547)]
-    // #[case(day!(Day4, 4), -1)]
+    #[case(day!(Day4, 4), 0)]
     #[case(day!(Day5, 5), 4872)]
     #[case(day!(Day6, 6), 5453)]
     #[case(day!(Day7, 7), 1399219271639)]

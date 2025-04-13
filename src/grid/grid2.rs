@@ -1,11 +1,11 @@
 #![allow(dead_code)]
 use std::iter::Peekable;
 
-pub struct Grid2<T> {
-    data: Vec<Vec<T>>,
-}
+/// A coordinate in a 2D grid
+pub struct Idx((usize, usize));
 
-#[derive(Debug)]
+/// A direction in a 2D grid
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum GridDirection {
     South,
     North,
@@ -14,6 +14,14 @@ pub enum GridDirection {
 }
 
 impl GridDirection {
+    fn iter() -> impl Iterator<Item = GridDirection> {
+        GridDirectionIter {
+            current: GridDirection::North,
+            first: GridDirection::North,
+            seen_all: false,
+        }
+    }
+
     pub fn turn_right(&self) -> Self {
         match self {
             GridDirection::South => GridDirection::West,
@@ -22,6 +30,38 @@ impl GridDirection {
             GridDirection::East => GridDirection::South,
         }
     }
+}
+
+/// An iterator over grid directions
+struct GridDirectionIter {
+    current: GridDirection,
+    first: GridDirection,
+    seen_all: bool,
+}
+
+impl Iterator for GridDirectionIter {
+    type Item = GridDirection;
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.seen_all {
+            return None;
+        }
+        let res = match self.current {
+            GridDirection::North => GridDirection::East,
+            GridDirection::East => GridDirection::South,
+            GridDirection::South => GridDirection::West,
+            GridDirection::West => GridDirection::North,
+        };
+        self.current = res.clone();
+        if self.current == self.first {
+            self.seen_all = true;
+        }
+        Some(res)
+    }
+}
+
+/// A 2D grid of values
+pub struct Grid2<T> {
+    data: Vec<Vec<T>>,
 }
 
 impl<T> Grid2<T> {
@@ -60,6 +100,42 @@ impl<T> Grid2<T> {
 
     pub fn iter(&self) -> impl Iterator<Item = &Vec<T>> {
         self.data.iter()
+    }
+
+    pub fn has_neighbor(&self, idx: (usize, usize), predicate: fn(&T) -> bool) -> bool {
+        for dir in GridDirection::iter() {
+            let v = self
+                .iter_from_index(idx, &dir)
+                .skip(1)
+                .take(1)
+                .collect::<Vec<_>>();
+            if let Some(v) = v.first() {
+                if predicate(v.1) {
+                    return true;
+                }
+            }
+        }
+        false
+    }
+
+    pub fn index_of_neighbor(&self, idx: (usize, usize), predicate: fn(&T) -> bool) -> Option<Idx> {
+        for dir in GridDirection::iter() {
+            let v = self
+                .iter_from_index(idx, &dir)
+                .skip(1)
+                .take(1)
+                .collect::<Vec<_>>();
+            if let Some(v) = v.first() {
+                if predicate(v.1) {
+                    return Some(Idx(v.0));
+                }
+            }
+        }
+        None
+    }
+
+    pub fn peek(&self, dir: &GridDirection) -> Option<&T> {
+        None
     }
     // fn movedir(dir: &GridDirection, col: usize) -> usize {
     //     match dir {
@@ -113,6 +189,24 @@ impl<'a, T> Iterator for Grid2Iterator<'a, T> {
 mod tests {
     use super::*;
 
+    fn new_grid() -> Grid2<char> {
+        let string_grid = vec!["123".to_string(), "456".to_string(), "789".to_string()];
+        Grid2::from(string_grid)
+    }
+
+    #[test]
+    fn gird_has_neighbor() {
+        let g = new_grid();
+        assert!(g.has_neighbor((0, 0), |x| *x == '2'));
+        assert!(g.has_neighbor((0, 0), |x| *x == '4'));
+        assert!(g.has_neighbor((1, 1), |x| *x == '2'));
+        assert!(g.has_neighbor((1, 1), |x| *x == '4'));
+        assert!(g.has_neighbor((1, 1), |x| *x == '6'));
+        assert!(g.has_neighbor((1, 1), |x| *x == '8'));
+        assert!(!g.has_neighbor((1, 1), |x| *x == '9'));
+        assert!(!g.has_neighbor((0, 0), |x| *x == '9'));
+    }
+
     #[test]
     fn iter_row() {
         let strs = ["123", "456"]
@@ -143,6 +237,16 @@ mod tests {
         // assert_eq!(it.next(), Some(((1, 0), &'4')));
         assert_eq!(it.next(), Some(((0, 1), &'2')));
         assert_eq!(it.next(), Some(((1, 1), &'5')));
+        assert_eq!(it.next(), None);
+    }
+
+    #[test]
+    fn grid_static_dir_iter() {
+        let mut it = GridDirection::iter();
+        assert_eq!(it.next(), Some(GridDirection::East));
+        assert_eq!(it.next(), Some(GridDirection::South));
+        assert_eq!(it.next(), Some(GridDirection::West));
+        assert_eq!(it.next(), Some(GridDirection::North));
         assert_eq!(it.next(), None);
     }
 }
